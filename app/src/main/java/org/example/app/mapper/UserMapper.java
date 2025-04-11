@@ -3,6 +3,7 @@ package org.example.app.mapper;
 import org.example.app.dto.user.UserCreateDTO;
 import org.example.app.dto.user.UserDTO;
 import org.example.app.dto.user.UserUpdateDTO;
+import org.example.app.exception.ResourceNotFoundException;
 import org.example.app.model.Card;
 import org.example.app.model.User;
 import org.example.app.repository.CardRepository;
@@ -37,7 +38,7 @@ public abstract class UserMapper {
                 ? new ArrayList<>()
                 : ids.stream()
                 .map(id -> cardRepository.findById(id)
-                        .orElseThrow())
+                        .orElseThrow(() -> new ResourceNotFoundException("Card not found")))
                 .collect(Collectors.toList());
     }
 

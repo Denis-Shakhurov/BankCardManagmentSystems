@@ -2,6 +2,7 @@ package org.example.app.mapper;
 
 import org.example.app.dto.card.CardCreateDTO;
 import org.example.app.dto.card.CardDTO;
+import org.example.app.exception.ResourceNotFoundException;
 import org.example.app.model.Card;
 import org.example.app.model.Limit;
 import org.example.app.model.Transaction;
@@ -38,7 +39,7 @@ public abstract class CardMapper {
     public List<Transaction> longToTransactions(List<Long> ids) {
         return ids.stream()
                 .map(id -> transactionRepository.findById(id)
-                        .orElseThrow())
+                        .orElseThrow(() -> new ResourceNotFoundException("Transaction not found")))
                 .collect(Collectors.toList());
     }
 
@@ -51,7 +52,7 @@ public abstract class CardMapper {
     public List<Limit> longToLimits(List<Long> ids) {
         return ids.stream()
                 .map(id -> limitRepository.findById(id)
-                        .orElseThrow())
+                        .orElseThrow(() -> new ResourceNotFoundException("Limit not found")))
                 .collect(Collectors.toList());
     }
 
