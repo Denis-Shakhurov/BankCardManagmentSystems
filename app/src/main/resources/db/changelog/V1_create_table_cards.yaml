@@ -1,0 +1,76 @@
+databaseChangeLog:
+  - changeSet:
+      id: create-sequence-card-seq
+      author: <DenisShakhurov>
+      changes:
+        - createSequence:
+            sequenceName: card_seq
+            startValue: 1
+            incrementBy: 1
+            minValue: 1
+            maxValue: 9223372036854775807
+            cycle: false
+            ordered: true
+
+  - changeSet:
+      id: create-cards-table
+      author: <DenisShakhurov>
+      changes:
+        - createTable:
+            tableName: cards
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: card_number
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+                    unique: true
+              - column:
+                  name: card_holder_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: expiry_date
+                  type: VARCHAR(5)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: status
+                  type: VARCHAR(20)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: balance
+                  type: DECIMAL(19,2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: TIMESTAMP
+              - column:
+                  name: updated_at
+                  type: TIMESTAMP
+              - column:
+                  name: user_id
+                  type: BIGINT
+        - addForeignKeyConstraint:
+            baseTableName: cards
+            baseColumnNames: user_id
+            constraintName: fk_card_user
+            referencedTableName: users
+            referencedColumnNames: id
+            onDelete: CASCADE
+            onUpdate: CASCADE
+        - modifyDataType:
+            tableName: cards
+            columnName: id
+            newDataType: BIGINT
+            defaultValueComputed: nextval('card_seq')
