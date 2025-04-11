@@ -27,13 +27,14 @@ public abstract class CardMapper {
     @Autowired
     private LimitRepository limitRepository;
 
+    @Mapping(target = "user.id", source = "userId")
     public abstract Card map(CardDTO dto);
 
+    @Mapping(target = "userId", source = "user.id")
     public abstract CardDTO map(Card model);
 
     public abstract Card map(CardCreateDTO dto);
 
-    @Mapping(target = "user.id", source = "userId")
     public abstract void update(CardCreateDTO dto, @MappingTarget Card model);
 
     public List<Transaction> longToTransactions(List<Long> ids) {

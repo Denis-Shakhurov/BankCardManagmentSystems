@@ -10,7 +10,6 @@ databaseChangeLog:
             minValue: 1
             maxValue: 9223372036854775807
             cycle: false
-            ordered: true
   - changeSet:
       id: create-limits-table
       author: <DenisShakhurov>

@@ -1,23 +1,21 @@
 databaseChangeLog:
   - changeSet:
-      id: create-sequence-card-seq
+      id: create-sequence-user-seq
       author: <DenisShakhurov>
       changes:
         - createSequence:
-            sequenceName: card_seq
+            sequenceName: user_seq
             startValue: 1
             incrementBy: 1
             minValue: 1
             maxValue: 9223372036854775807
             cycle: false
-            ordered: true
-
   - changeSet:
-      id: create-cards-table
+      id: create-users-table
       author: <DenisShakhurov>
       changes:
         - createTable:
-            tableName: cards
+            tableName: users
             columns:
               - column:
                   name: id
@@ -27,29 +25,29 @@ databaseChangeLog:
                     primaryKey: true
                     nullable: false
               - column:
-                  name: card_number
+                  name: first_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: email
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
                     unique: true
               - column:
-                  name: card_holder_name
+                  name: password
                   type: VARCHAR(255)
                   constraints:
                     nullable: false
               - column:
-                  name: expiry_date
-                  type: VARCHAR(5)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: status
-                  type: VARCHAR(20)
-                  constraints:
-                    nullable: false
-              - column:
-                  name: balance
-                  type: DECIMAL(19,2)
+                  name: role
+                  type: VARCHAR(30)
                   constraints:
                     nullable: false
               - column:
@@ -58,19 +56,15 @@ databaseChangeLog:
               - column:
                   name: updated_at
                   type: TIMESTAMP
-              - column:
-                  name: user_id
-                  type: BIGINT
-        - addForeignKeyConstraint:
-            baseTableName: cards
-            baseColumnNames: user_id
-            constraintName: fk_card_user
-            referencedTableName: users
-            referencedColumnNames: id
-            onDelete: CASCADE
-            onUpdate: CASCADE
+            remarks: "Table for storing user information"
+
         - modifyDataType:
-            tableName: cards
+            tableName: users
             columnName: id
             newDataType: BIGINT
-            defaultValueComputed: nextval('card_seq')
+            defaultValueComputed: nextval('user_seq')
+
+        - addUniqueConstraint:
+            tableName: users
+            columnNames: email
+            constraintName: uk_user_email

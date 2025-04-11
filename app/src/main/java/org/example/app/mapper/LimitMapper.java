@@ -15,13 +15,18 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         componentModel = MappingConstants.ComponentModel.SPRING
 )
 public abstract class LimitMapper {
-    @Mapping(target = "user.id", source = "userId")
+    @Mapping(target = "card.id", source = "cardId")
     public abstract Limit map(LimitDTO dto);
 
-    @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "cardId", source = "card.id")
     public abstract LimitDTO map(Limit model);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "active", ignore = true)
+    @Mapping(target = "card", ignore = true)
     public abstract Limit map(LimitCreateDTO dto);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "card", ignore = true)
     public abstract void update(LimitUpdateDTO dto,@MappingTarget Limit model);
 }

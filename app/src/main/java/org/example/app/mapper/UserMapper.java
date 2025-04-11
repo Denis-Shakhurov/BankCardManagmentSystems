@@ -8,9 +8,11 @@ import org.example.app.model.Card;
 import org.example.app.model.User;
 import org.example.app.repository.CardRepository;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
@@ -19,31 +21,46 @@ import java.util.stream.Collectors;
 
 @Mapper(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        componentModel = MappingConstants.ComponentModel.SPRING
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE,
+        uses = {CardMapper.class}
 )
 public abstract class UserMapper {
     @Autowired
     private CardRepository cardRepository;
 
+    @Mapping(target = "password", ignore = true)
+    @Mapping(target = "cards", ignore = true)
     public abstract User map(UserDTO dto);
 
+    @Mapping(target = "cardIds", source = "cards")
     public abstract UserDTO map(User model);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "cards", ignore = true)
     public abstract User map(UserCreateDTO dto);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "createdAt", ignore = true)
+    @Mapping(target = "updatedAt", ignore = true)
+    @Mapping(target = "cards", ignore = true)
     public abstract void update(UserUpdateDTO dto, @MappingTarget User model);
 
     public List<Card> longToCards(List<Long> ids) {
-        return ids.isEmpty()
+        return ids == null || ids.isEmpty()
                 ? new ArrayList<>()
                 : ids.stream()
                 .map(id -> cardRepository.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Card not found")))
+                        .orElseThrow(() -> new ResourceNotFoundException("Карта не найдена")))
                 .collect(Collectors.toList());
     }
 
     public List<Long> cardsToLong(List<Card> cards) {
-        return cards.stream()
+        return cards == null
+                ? new ArrayList<>()
+                : cards.stream()
                 .map(Card::getId)
                 .collect(Collectors.toList());
     }

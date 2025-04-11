@@ -15,13 +15,17 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
         componentModel = MappingConstants.ComponentModel.SPRING
 )
 public abstract class TransactionMapper {
-    @Mapping(target = "cardId", source = "user.id")
+    @Mapping(target = "cardId", source = "card.id")
     public abstract TransactionDTO map(Transaction model);
 
-    @Mapping(target = "user.id", source = "userId")
+    @Mapping(target = "card.id", source = "cardId")
     public abstract Transaction map(TransactionDTO dto);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "card", ignore = true)
     public abstract Transaction map(TransactionCreateDTO dto);
 
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "card", ignore = true)
     public abstract void update(TransactionUpdateDTO dto, @MappingTarget Transaction model);
 }

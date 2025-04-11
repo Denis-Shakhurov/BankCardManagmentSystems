@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.app.model.Role;
 
 /**
  * DTO for {@link org.example.app.model.User}
@@ -31,4 +32,7 @@ public class UserCreateDTO {
     @NotNull
     @NotBlank
     private String password;
+
+    @NotNull
+    private Role role;
 }
