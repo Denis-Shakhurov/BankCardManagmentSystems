@@ -35,12 +35,6 @@ databaseChangeLog:
                   constraints:
                     nullable: false
               - column:
-                  name: used_amount
-                  type: DECIMAL(19,2)
-                  defaultValueNumeric: 0
-                  constraints:
-                    nullable: false
-              - column:
                   name: period_start_date
                   type: DATE
                   constraints:

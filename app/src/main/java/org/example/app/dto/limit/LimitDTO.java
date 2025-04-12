@@ -20,7 +20,6 @@ public class LimitDTO {
     private Long id;
     private PeriodType periodType;
     private BigDecimal limitAmount;
-    private BigDecimal usedAmount;
     private LocalDate periodStartDate;
     private boolean active;
     private Long cardId;

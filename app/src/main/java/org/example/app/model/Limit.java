@@ -34,9 +34,6 @@ public class Limit {
     @Column(name = "limit_amount", nullable = false)
     private BigDecimal limitAmount;
 
-    @Column(name = "used_amount", nullable = false)
-    private BigDecimal usedAmount = BigDecimal.ZERO;
-
     @Column(name = "period_start_date", nullable = false)
     private LocalDate periodStartDate;
 
