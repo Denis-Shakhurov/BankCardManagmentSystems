@@ -29,23 +29,13 @@ public abstract class UserMapper {
     @Autowired
     private CardRepository cardRepository;
 
-    @Mapping(target = "password", ignore = true)
-    @Mapping(target = "cards", ignore = true)
     public abstract User map(UserDTO dto);
 
     @Mapping(target = "cardIds", source = "cards")
     public abstract UserDTO map(User model);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "cards", ignore = true)
     public abstract User map(UserCreateDTO dto);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "createdAt", ignore = true)
-    @Mapping(target = "updatedAt", ignore = true)
-    @Mapping(target = "cards", ignore = true)
     public abstract void update(UserUpdateDTO dto, @MappingTarget User model);
 
     public List<Card> longToCards(List<Long> ids) {
@@ -53,7 +43,7 @@ public abstract class UserMapper {
                 ? new ArrayList<>()
                 : ids.stream()
                 .map(id -> cardRepository.findById(id)
-                        .orElseThrow(() -> new ResourceNotFoundException("Карта не найдена")))
+                        .orElseThrow(() -> new ResourceNotFoundException("Card not found")))
                 .collect(Collectors.toList());
     }
 

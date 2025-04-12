@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,6 +52,7 @@ public class TransactionService {
 
         Transaction transaction = transactionMapper.map(createDTO);
         transaction.setCard(card);
+        transaction.setTransactionDate(LocalDateTime.now());
 
         Long id = transactionRepository.save(transaction).getId();
         transaction.setId(id);

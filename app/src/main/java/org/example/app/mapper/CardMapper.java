@@ -13,14 +13,16 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
+import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE,
-        componentModel = MappingConstants.ComponentModel.SPRING)
+@Mapper(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public abstract class CardMapper {
     @Autowired
     private TransactionRepository transactionRepository;
@@ -32,6 +34,8 @@ public abstract class CardMapper {
     public abstract Card map(CardDTO dto);
 
     @Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "transactionIds", source = "transactions")
+    @Mapping(target = "limitIds", source = "limits")
     public abstract CardDTO map(Card model);
 
     public abstract Card map(CardCreateDTO dto);

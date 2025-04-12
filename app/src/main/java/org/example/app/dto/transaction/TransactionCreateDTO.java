@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NegativeOrZero;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,16 +23,16 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class TransactionCreateDTO {
     @NotNull
-    @NegativeOrZero
+    @PositiveOrZero
     private BigDecimal amount;
 
     @NotNull
     @NotBlank
     private String description;
 
-    @NotNull
-    @PastOrPresent
-    private LocalDateTime transactionDate;
+//    @NotNull
+//    @PastOrPresent
+//    private LocalDateTime transactionDate;
 
     @NotNull
     private TransactionType type;

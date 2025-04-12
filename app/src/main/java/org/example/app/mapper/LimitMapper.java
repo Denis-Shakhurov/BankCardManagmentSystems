@@ -9,10 +9,12 @@ import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
 import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.ReportingPolicy;
 
 @Mapper(
         nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE,
-        componentModel = MappingConstants.ComponentModel.SPRING
+        componentModel = MappingConstants.ComponentModel.SPRING,
+        unmappedTargetPolicy = ReportingPolicy.IGNORE
 )
 public abstract class LimitMapper {
     @Mapping(target = "card.id", source = "cardId")
@@ -21,12 +23,7 @@ public abstract class LimitMapper {
     @Mapping(target = "cardId", source = "card.id")
     public abstract LimitDTO map(Limit model);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "active", ignore = true)
-    @Mapping(target = "card", ignore = true)
     public abstract Limit map(LimitCreateDTO dto);
 
-    @Mapping(target = "id", ignore = true)
-    @Mapping(target = "card", ignore = true)
     public abstract void update(LimitUpdateDTO dto,@MappingTarget Limit model);
 }
