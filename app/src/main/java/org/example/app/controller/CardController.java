@@ -22,7 +22,7 @@ import java.util.List;
 
 @Validated
 @RestController
-@RequestMapping("/cards")
+@RequestMapping("/api/cards")
 @RequiredArgsConstructor
 public class CardController {
     private final CardService cardService;
