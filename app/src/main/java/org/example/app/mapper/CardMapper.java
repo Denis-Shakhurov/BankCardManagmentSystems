@@ -2,6 +2,7 @@ package org.example.app.mapper;
 
 import org.example.app.dto.card.CardCreateDTO;
 import org.example.app.dto.card.CardDTO;
+import org.example.app.dto.card.CardUpdateDTO;
 import org.example.app.exception.ResourceNotFoundException;
 import org.example.app.model.Card;
 import org.example.app.model.Limit;
@@ -35,7 +36,7 @@ public abstract class CardMapper {
 
     public abstract Card map(CardCreateDTO dto);
 
-    public abstract void update(CardCreateDTO dto, @MappingTarget Card model);
+    public abstract void update(CardUpdateDTO dto, @MappingTarget Card model);
 
     public List<Transaction> longToTransactions(List<Long> ids) {
         return ids.stream()
