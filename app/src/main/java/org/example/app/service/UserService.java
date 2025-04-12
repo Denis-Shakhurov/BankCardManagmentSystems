@@ -1,5 +1,6 @@
 package org.example.app.service;
 
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import org.example.app.dto.AuthDTO;
 import org.example.app.dto.user.UserCreateDTO;
@@ -12,6 +13,7 @@ import org.example.app.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -40,6 +42,11 @@ public class UserService {
     }
 
     public UserDTO create(UserCreateDTO dto) {
+        Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
+        if (userOptional.isPresent()) {
+            throw new ValidationException("Email already in use");
+        }
+
         User user = userMapper.map(dto);
 
         Long id = userRepository.save(user).getId();

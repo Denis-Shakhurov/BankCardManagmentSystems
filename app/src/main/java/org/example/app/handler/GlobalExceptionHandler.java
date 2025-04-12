@@ -1,5 +1,6 @@
 package org.example.app.handler;
 
+import jakarta.validation.ValidationException;
 import org.example.app.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +21,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> resourceNotFound(ResourceNotFoundException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(ValidationException.class)
+    public ResponseEntity<Object> validation(ValidationException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
     }
 
