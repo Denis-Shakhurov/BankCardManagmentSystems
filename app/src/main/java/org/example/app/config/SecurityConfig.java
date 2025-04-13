@@ -39,6 +39,7 @@ public class SecurityConfig {
                         // Разрешаем доступ только к /login, чтобы аутентифицироваться и получить токен
                         .requestMatchers(AntPathRequestMatcher.antMatcher("/h2-console/**")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/")).permitAll()
+//                        .requestMatchers(mvcMatcherBuilder.pattern("/api/users")).hasRole("ADMIN")
                         .requestMatchers(mvcMatcherBuilder.pattern("/api/users/register")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/api/users/login")).permitAll()
                         .requestMatchers(mvcMatcherBuilder.pattern("/v3/api-docs/**")).permitAll()

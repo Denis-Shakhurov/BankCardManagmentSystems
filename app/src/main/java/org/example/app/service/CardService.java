@@ -1,6 +1,7 @@
 package org.example.app.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.app.component.UserUtils;
 import org.example.app.dto.card.CardCreateDTO;
 import org.example.app.dto.card.CardDTO;
 import org.example.app.dto.card.CardParamDTO;
@@ -8,6 +9,7 @@ import org.example.app.dto.card.CardUpdateDTO;
 import org.example.app.exception.ResourceNotFoundException;
 import org.example.app.mapper.CardMapper;
 import org.example.app.model.Card;
+import org.example.app.model.Role;
 import org.example.app.model.User;
 import org.example.app.repository.CardRepository;
 import org.example.app.repository.UserRepository;
@@ -15,6 +17,7 @@ import org.example.app.specification.CardSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -25,6 +28,7 @@ public class CardService {
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
     private final CardMapper cardMapper;
+    private final UserUtils userUtils;
 
     public CardDTO findById(Long id) {
         Card card = cardRepository.findById(id)
@@ -34,14 +38,15 @@ public class CardService {
 
     public List<CardDTO> findAll(CardParamDTO params) {
         Specification<Card> spec = specBuilder.build(params);
-        List<Card> cards = cardRepository.findAll(spec);
-        return cards.stream()
-                .map(cardMapper::map)
-                .collect(Collectors.toList());
-    }
+        List<Card> cards = new ArrayList<>();
+        User user = userUtils.getCurrentUser();
 
-    public List<CardDTO> findAllByUserId(Long userId) {
-        List<Card> cards = cardRepository.findAllByUserId(userId);
+        if (user != null && user.getRole().equals(Role.USER)) {
+            cards.addAll(cardRepository.findAllByUserId(user.getId()));
+        } else {
+            cards.addAll(cardRepository.findAll(spec));
+        }
+
         return cards.stream()
                 .map(cardMapper::map)
                 .collect(Collectors.toList());
