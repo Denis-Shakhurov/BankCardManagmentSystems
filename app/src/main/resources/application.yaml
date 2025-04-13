@@ -22,3 +22,7 @@ logging:
     org.springframework.context: DEBUG
     org.springframework.aop: DEBUG
     org.example: DEBUG
+
+rsa:
+  private-key: classpath:certs/private.pem
+  public-key: classpath:certs/public.pem

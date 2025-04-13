@@ -7,6 +7,7 @@ import org.example.app.exception.ResourceNotFoundException;
 import org.example.app.model.Card;
 import org.example.app.model.User;
 import org.example.app.repository.CardRepository;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -14,6 +15,8 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +31,9 @@ import java.util.stream.Collectors;
 public abstract class UserMapper {
     @Autowired
     private CardRepository cardRepository;
+
+    @Autowired
+    private PasswordEncoder encoder;
 
     public abstract User map(UserDTO dto);
 
@@ -53,5 +59,19 @@ public abstract class UserMapper {
                 : cards.stream()
                 .map(Card::getId)
                 .collect(Collectors.toList());
+    }
+
+    @BeforeMapping
+    public void encryptPassword(UserCreateDTO data) {
+        var password = data.getPassword();
+        data.setPassword(encoder.encode(password));
+    }
+
+    @BeforeMapping
+    public void encryptPassword(UserUpdateDTO dto, @MappingTarget User model) {
+        if (dto.getPassword() != null) {
+            String password = dto.getPassword();
+            model.setPassword(encoder.encode(password));
+        }
     }
 }
