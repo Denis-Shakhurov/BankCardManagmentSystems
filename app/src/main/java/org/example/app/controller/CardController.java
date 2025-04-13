@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.app.dto.card.CardCreateDTO;
 import org.example.app.dto.card.CardDTO;
+import org.example.app.dto.card.CardParamDTO;
 import org.example.app.dto.card.CardUpdateDTO;
 import org.example.app.service.CardService;
 import org.springframework.http.HttpStatus;
@@ -34,9 +35,11 @@ public class CardController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CardDTO>> index(@RequestParam Long userId) {
-        List<CardDTO> cardDTOS = cardService.findAllByUserId(userId);
-        return ResponseEntity.ok(cardDTOS);
+    public ResponseEntity<List<CardDTO>> showAll(CardParamDTO params) {
+        List<CardDTO> cardDTOS = cardService.findAll(params);
+        return ResponseEntity.ok()
+                .header("X-Total-Count", String.valueOf(cardDTOS.size()))
+                .body(cardDTOS);
     }
 
     @PostMapping

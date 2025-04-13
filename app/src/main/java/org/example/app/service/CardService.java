@@ -3,6 +3,7 @@ package org.example.app.service;
 import lombok.RequiredArgsConstructor;
 import org.example.app.dto.card.CardCreateDTO;
 import org.example.app.dto.card.CardDTO;
+import org.example.app.dto.card.CardParamDTO;
 import org.example.app.dto.card.CardUpdateDTO;
 import org.example.app.exception.ResourceNotFoundException;
 import org.example.app.mapper.CardMapper;
@@ -10,6 +11,8 @@ import org.example.app.model.Card;
 import org.example.app.model.User;
 import org.example.app.repository.CardRepository;
 import org.example.app.repository.UserRepository;
+import org.example.app.specification.CardSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,6 +21,7 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class CardService {
+    private final CardSpecification specBuilder;
     private final CardRepository cardRepository;
     private final UserRepository userRepository;
     private final CardMapper cardMapper;
@@ -26,6 +30,14 @@ public class CardService {
         Card card = cardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Card not found with id " + id));
         return cardMapper.map(card);
+    }
+
+    public List<CardDTO> findAll(CardParamDTO params) {
+        Specification<Card> spec = specBuilder.build(params);
+        List<Card> cards = cardRepository.findAll(spec);
+        return cards.stream()
+                .map(cardMapper::map)
+                .collect(Collectors.toList());
     }
 
     public List<CardDTO> findAllByUserId(Long userId) {

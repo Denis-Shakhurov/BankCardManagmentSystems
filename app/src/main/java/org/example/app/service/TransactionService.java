@@ -3,6 +3,7 @@ package org.example.app.service;
 import lombok.RequiredArgsConstructor;
 import org.example.app.dto.transaction.TransactionCreateDTO;
 import org.example.app.dto.transaction.TransactionDTO;
+import org.example.app.dto.transaction.TransactionParamDTO;
 import org.example.app.dto.transaction.TransactionUpdateDTO;
 import org.example.app.exception.ResourceNotFoundException;
 import org.example.app.mapper.TransactionMapper;
@@ -10,6 +11,8 @@ import org.example.app.model.Card;
 import org.example.app.model.Transaction;
 import org.example.app.repository.CardRepository;
 import org.example.app.repository.TransactionRepository;
+import org.example.app.specification.TransactionSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -22,6 +25,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class TransactionService {
     private final TransactionRepository transactionRepository;
+    private final TransactionSpecification specBuilder;
     private final TransactionMapper transactionMapper;
     private final LimitService limitService;
     private final CardRepository cardRepository;
@@ -32,8 +36,9 @@ public class TransactionService {
         return transactionMapper.map(transaction);
     }
 
-    public List<TransactionDTO> findAll() {
-        List<Transaction> transactions = transactionRepository.findAll();
+    public List<TransactionDTO> findAll(TransactionParamDTO params) {
+        Specification<Transaction> spec = specBuilder.build(params);
+        List<Transaction> transactions = transactionRepository.findAll(spec);
         return transactions.stream()
                 .map(transactionMapper::map)
                 .collect(Collectors.toList());

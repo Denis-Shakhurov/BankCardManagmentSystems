@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.example.app.dto.transaction.TransactionCreateDTO;
 import org.example.app.dto.transaction.TransactionDTO;
+import org.example.app.dto.transaction.TransactionParamDTO;
 import org.example.app.dto.transaction.TransactionUpdateDTO;
 import org.example.app.service.TransactionService;
 import org.springframework.http.HttpStatus;
@@ -33,9 +34,14 @@ public class TransactionController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TransactionDTO>> index(@PathVariable Long cardId) {
-        List<TransactionDTO> transactionDTOS = transactionService.findALLByCardId(cardId);
-        return ResponseEntity.ok(transactionDTOS);
+    public ResponseEntity<List<TransactionDTO>> findAll(
+            @PathVariable Long cardId,
+            TransactionParamDTO params) {
+        params.setCardId(cardId);
+        List<TransactionDTO> transactionDTOS = transactionService.findAll(params);
+        return ResponseEntity.ok()
+                .header("X-total-count", String.valueOf(transactionDTOS.size()))
+                .body(transactionDTOS);
     }
 
     @PostMapping

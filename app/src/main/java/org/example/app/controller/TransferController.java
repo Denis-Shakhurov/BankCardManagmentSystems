@@ -23,8 +23,8 @@ public class TransferController {
     @PostMapping("/between-own-cards")
     public ResponseEntity<Void> transferBetweenOwnCards(
             @RequestBody @Valid TransferDTO transferDTO,
-            @PathVariable Long id) {
-        transferService.transferBetweenOwnCards(id, transferDTO);
+            @PathVariable Long userId) {
+        transferService.transferBetweenOwnCards(userId, transferDTO);
         return ResponseEntity.ok().build();
     }
 }
