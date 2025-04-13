@@ -2,7 +2,7 @@ package org.example.app.dto.limit;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
-import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.example.app.model.PeriodType;
@@ -19,7 +19,7 @@ public class LimitCreateDTO {
     private final PeriodType periodType;
 
     @NotNull
-    @PositiveOrZero
+    @Positive
     private final BigDecimal limitAmount;
 
     @PastOrPresent

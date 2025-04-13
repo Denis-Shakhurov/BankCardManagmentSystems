@@ -1,6 +1,7 @@
 package org.example.app.handler;
 
 import jakarta.validation.ValidationException;
+import org.example.app.exception.InsufficientFundsException;
 import org.example.app.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +44,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(getErrorMessage(e.getBindingResult()));
+    }
+
+    @ExceptionHandler(InsufficientFundsException.class)
+    public ResponseEntity<Object> insufficientFunds(InsufficientFundsException e) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
     }
 
     private String getErrorMessage(BindingResult bindingResult) {
