@@ -1,7 +1,6 @@
 package org.example.app.component;
 
 import lombok.RequiredArgsConstructor;
-import org.example.app.model.Role;
 import org.example.app.model.User;
 import org.example.app.repository.UserRepository;
 import org.example.app.service.CustomUserDetailsService;
@@ -9,7 +8,6 @@ import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 @Component

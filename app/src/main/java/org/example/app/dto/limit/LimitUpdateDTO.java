@@ -1,6 +1,6 @@
 package org.example.app.dto.limit;
 
-import jakarta.validation.constraints.NegativeOrZero;
+import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
@@ -21,7 +21,7 @@ public class LimitUpdateDTO {
     @Positive
     private final BigDecimal limitAmount;
 
-    @PastOrPresent
+    @FutureOrPresent
     private final LocalDate periodStartDate;
 
     private final boolean active;
