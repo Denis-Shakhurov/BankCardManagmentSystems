@@ -1,10 +1,12 @@
 package org.example.app.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.app.model.Role;
 import org.example.app.model.User;
 import org.example.app.repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Service;
 
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class CustomUserDetailsService implements UserDetailsManager {
     private final UserRepository userRepository;
+    private final PasswordEncoder encoder;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -25,8 +28,17 @@ public class CustomUserDetailsService implements UserDetailsManager {
     }
 
     @Override
-    public void createUser(UserDetails user) {
+    public void createUser(UserDetails userData) {
+        String hashedPassword = encoder.encode(userData.getPassword());
 
+        User user = new User();
+        user.setFirstName("Admin");
+        user.setLastName("Admin");
+        user.setEmail(userData.getUsername());
+        user.setPassword(hashedPassword);
+        user.setRole(Role.ADMIN);
+
+        userRepository.save(user);
     }
 
     @Override
