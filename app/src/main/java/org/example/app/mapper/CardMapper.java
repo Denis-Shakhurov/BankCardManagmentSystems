@@ -1,5 +1,6 @@
 package org.example.app.mapper;
 
+import org.example.app.component.CryptoEncoder;
 import org.example.app.dto.card.CardCreateDTO;
 import org.example.app.dto.card.CardDTO;
 import org.example.app.dto.card.CardUpdateDTO;
@@ -9,6 +10,8 @@ import org.example.app.model.Limit;
 import org.example.app.model.Transaction;
 import org.example.app.repository.LimitRepository;
 import org.example.app.repository.TransactionRepository;
+import org.mapstruct.AfterMapping;
+import org.mapstruct.BeforeMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -29,6 +32,9 @@ public abstract class CardMapper {
 
     @Autowired
     private LimitRepository limitRepository;
+
+    @Autowired
+    private CryptoEncoder encoder;
 
     @Mapping(target = "user.id", source = "userId")
     public abstract Card map(CardDTO dto);
@@ -66,5 +72,23 @@ public abstract class CardMapper {
         return limits.stream()
                 .map(Limit::getId)
                 .collect(Collectors.toList());
+    }
+
+    @BeforeMapping
+    public void encryptCardNumber(CardCreateDTO dto) {
+        String cardNumber = dto.getCardNumber();
+        dto.setCardNumber(encoder.encrypt(cardNumber));
+    }
+
+    @AfterMapping
+    public void maskCardNumber(Card model, @MappingTarget CardDTO dto) {
+        String encrypted = model.getCardNumber();
+        String decrypted = encoder.decrypt(encrypted);
+        dto.setCardNumber(maskNumber(decrypted));
+    }
+
+    private String maskNumber(String cardNumber) {
+        if (cardNumber == null || cardNumber.length() < 4) return "****";
+        return "**** **** **** " + cardNumber.substring(cardNumber.length() - 4);
     }
 }

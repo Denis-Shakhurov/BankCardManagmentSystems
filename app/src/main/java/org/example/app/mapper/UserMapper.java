@@ -15,7 +15,6 @@ import org.mapstruct.MappingTarget;
 import org.mapstruct.NullValuePropertyMappingStrategy;
 import org.mapstruct.ReportingPolicy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
@@ -62,9 +61,9 @@ public abstract class UserMapper {
     }
 
     @BeforeMapping
-    public void encryptPassword(UserCreateDTO data) {
-        var password = data.getPassword();
-        data.setPassword(encoder.encode(password));
+    public void encryptPassword(UserCreateDTO dto) {
+        String password = dto.getPassword();
+        dto.setPassword(encoder.encode(password));
     }
 
     @BeforeMapping

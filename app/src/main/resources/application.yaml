@@ -14,6 +14,8 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
     enabled: true
+  jpa:
+    show-sql: true
 
 logging:
   level:
@@ -22,6 +24,9 @@ logging:
     org.springframework.context: DEBUG
     org.springframework.aop: DEBUG
     org.example: DEBUG
+
+encryption:
+  secret: mySuperSecretKey1234567890123456
 
 rsa:
   private-key: classpath:certs/private.pem
