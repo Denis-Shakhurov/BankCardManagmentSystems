@@ -14,6 +14,7 @@ import org.example.app.repository.TransactionRepository;
 import org.example.app.specification.TransactionSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -51,6 +52,7 @@ public class TransactionService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public TransactionDTO save(TransactionCreateDTO createDTO, Long cardId) {
         Card card = cardRepository.findById(cardId)
                 .orElse(null);
@@ -67,6 +69,7 @@ public class TransactionService {
         return transactionMapper.map(transaction);
     }
 
+    @Transactional
     public TransactionDTO update(Long id, TransactionUpdateDTO updateDTO) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found with id " + id ));
@@ -78,6 +81,7 @@ public class TransactionService {
         return transactionMapper.map(transaction);
     }
 
+    @Transactional
     public void delete(Long id) {
         Transaction transaction = transactionRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Transaction not found with id " + id ));

@@ -16,6 +16,7 @@ import org.example.app.repository.UserRepository;
 import org.example.app.specification.CardSpecification;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,6 +53,7 @@ public class CardService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public CardDTO create(CardCreateDTO createDTO, Long userId) {
         User user = userRepository.findById(userId)
                 .orElse(null);
@@ -65,6 +67,7 @@ public class CardService {
         return cardMapper.map(card);
     }
 
+    @Transactional
     public CardDTO update(CardUpdateDTO updateDTO, Long id) {
         Card card = cardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Card not found with id " + id));
@@ -74,6 +77,7 @@ public class CardService {
         return cardMapper.map(card);
     }
 
+    @Transactional
     public void delete(Long id) {
         Card card = cardRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Card not found with id " + id));

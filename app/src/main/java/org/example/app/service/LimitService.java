@@ -13,6 +13,7 @@ import org.example.app.repository.CardRepository;
 import org.example.app.repository.LimitRepository;
 import org.example.app.repository.TransactionRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -40,6 +41,7 @@ public class LimitService {
                 .collect(Collectors.toList());
     }
 
+    @Transactional
     public LimitDTO save(LimitCreateDTO createDTO, Long cardId) {
         Card card = cardRepository.findById(cardId)
                 .orElse(null);
@@ -51,6 +53,7 @@ public class LimitService {
         return limitMapper.map(limit);
     }
 
+    @Transactional
     public LimitDTO update(Long id, LimitUpdateDTO updateDTO) {
         Limit limit = limitRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Limit not found with id: " + id));
@@ -61,12 +64,14 @@ public class LimitService {
         return limitMapper.map(limit);
     }
 
+    @Transactional
     public void delete(Long id) {
         Limit limit = limitRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Limit not found with id: " + id));
         limitRepository.delete(limit);
     }
 
+    @Transactional
     public void checkLimit(Long cardId, BigDecimal amount) {
         List<Limit> limits = limitRepository.findByCardId(cardId);
         if (!limits.isEmpty()) {

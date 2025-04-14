@@ -11,6 +11,7 @@ import org.example.app.mapper.UserMapper;
 import org.example.app.model.User;
 import org.example.app.repository.UserRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -35,12 +36,14 @@ public class UserService {
         return userMapper.map(user);
     }
 
+    @Transactional
     public UserDTO login(AuthDTO authDTO) {
         User user = userRepository.findByEmail(authDTO.getEmail())
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with email " + authDTO.getEmail()));
         return userMapper.map(user);
     }
 
+    @Transactional
     public UserDTO create(UserCreateDTO dto) {
         Optional<User> userOptional = userRepository.findByEmail(dto.getEmail());
         if (userOptional.isPresent()) {
@@ -55,6 +58,7 @@ public class UserService {
         return userMapper.map(user);
     }
 
+    @Transactional
     public UserDTO update(Long id, UserUpdateDTO dto) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
@@ -63,6 +67,7 @@ public class UserService {
         return userMapper.map(user);
     }
 
+    @Transactional
     public void delete(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found with id " + id));
