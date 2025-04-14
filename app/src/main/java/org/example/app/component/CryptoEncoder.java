@@ -1,6 +1,7 @@
 package org.example.app.component;
 
 import jakarta.annotation.PostConstruct;
+import org.example.app.exception.CryptoException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
@@ -46,7 +47,7 @@ public class CryptoEncoder {
 
             return Base64.getEncoder().encodeToString(combined);
         } catch (Exception e) {
-            throw new CryptoException("Encryption failed", e);
+            throw new CryptoException("Encryption failed");
         }
     }
 
@@ -68,7 +69,7 @@ public class CryptoEncoder {
 
             return new String(decrypted, StandardCharsets.UTF_8);
         } catch (Exception e) {
-            throw new CryptoException("Decryption failed", e);
+            throw new CryptoException("Decryption failed");
         }
     }
 
@@ -76,12 +77,5 @@ public class CryptoEncoder {
         byte[] iv = new byte[IV_LENGTH];
         new SecureRandom().nextBytes(iv);
         return iv;
-    }
-
-    // Кастомное исключение с обработкой в Spring
-    public static class CryptoException extends RuntimeException {
-        public CryptoException(String message, Throwable cause) {
-            super(message, cause);
-        }
     }
 }

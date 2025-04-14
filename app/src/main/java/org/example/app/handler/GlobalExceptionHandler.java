@@ -1,6 +1,7 @@
 package org.example.app.handler;
 
 import jakarta.validation.ValidationException;
+import org.example.app.exception.CryptoException;
 import org.example.app.exception.InsufficientFundsException;
 import org.example.app.exception.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<Object> handleRuntimeException(RuntimeException e) {
         return ResponseEntity
-                .status(HttpStatus.PAYMENT_REQUIRED)
+                .status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
     }
 
@@ -50,6 +51,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> insufficientFunds(InsufficientFundsException e) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(e.getMessage());
+    }
+
+    @ExceptionHandler(CryptoException.class)
+    public ResponseEntity<Object> cryptoException(CryptoException e) {
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(e.getMessage());
     }
 
