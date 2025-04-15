@@ -1,0 +1,44 @@
+services:
+  postgres:
+    image: postgres:13
+    restart: "no"
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: postgres
+    healthcheck:
+      test: pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB
+      interval: 10s
+      timeout: 5s
+      start_period: 10s
+      retries: 5
+  app:
+    image: app:latest
+    build:
+      context: .
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: "no"
+    ports:
+      - "8080:8080"
+    environment:
+      POSTGRES_HOST: postgres:5432
+    depends_on:
+      - postgres
+  spring-app:
+    image: spring-app:latest
+    build:
+      context: .
+      args:
+        DOCKER_BUILDKIT: 1
+    restart: "no"
+    ports:
+      - "8081:8080"
+    environment:
+      POSTGRES_HOST: postgres:5432
+volumes:
+  postgres_data:
